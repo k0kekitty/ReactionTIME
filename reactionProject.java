@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.event.EventHandler;
 
 
 public class reactionProject extends Application {
@@ -20,6 +21,19 @@ public class reactionProject extends Application {
 
 
     Scene scene = new Scene(pane,1000,700);
+
+
+
+    scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.SPACE) {
+                pane.getChildren().clear();
+            }
+        }
+    });
+
+    
     primaryStage.setTitle("Reaction Time");
     primaryStage.setScene(scene);
     primaryStage.show();
