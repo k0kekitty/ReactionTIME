@@ -6,13 +6,16 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 
 public class reactionProject extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
     StackPane pane = new StackPane();
-
+    Rectangle redRect = new Rectangle(0,0,300,150);
+    redRect.setFill(Color.RED);
+    pane.getChildren().add(redRect);
 
 
 
