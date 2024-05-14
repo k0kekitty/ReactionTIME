@@ -31,7 +31,10 @@ public class reactionProject extends Application {
         "When the red rectangle appears on the screen, press the space bar as quickly as you can. Press start to begin.", startButt);
     private int count = 0;
     private Random generator;
-    private int randomInt = 1000;
+    private int randomInt = 3000;
+    private long totalTime = 0;
+    private long startTime = 0;
+    private long finish = 0;
     
     
 
@@ -75,9 +78,7 @@ public class reactionProject extends Application {
     private void beginGame() {
         start = true;
         pane.getChildren().remove(description);
-        redRect.setFill(Color.RED);
-        pane.getChildren().add(redRect);
-        rectOnScreen = true;
+        rectOnScreen = false;
         /*
         EventHandler<KeyEvent> spaceHandler = e -> {
                 if(event.getCode() == KeyCode.SPACE && count < 6) {
@@ -97,27 +98,50 @@ public class reactionProject extends Application {
 
         /* 
         Timeline animation = new Timeline();
+        animation.setCycleCount(Timeline.INDEFINITE);
 
-        animation.getKeyFrames().addAll(new KeyFrame(Duration.ZERO, new EventHandler<ActionEvent>() {
+        animation.getKeyFrames().addAll(new KeyFrame(Duration.millis(randomInt), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (rectOnScreen == false) {
                     pane.getChildren().add(redRect);
-                    randomInt = generator.nextInt(1000) + 5;
-                    animation.setRate(1d/randomInt);
+                    int andomInt = generator.nextInt(1000) + 5;
+                    animation.setRate(1d/andomInt);
                     rectOnScreen = true;
                 } else {
                     pane.getChildren().clear();
-                    randomInt = generator.nextInt(1000) + 5;
-                    animation.setRate(1d/randomInt);
+                    int andomInt = generator.nextInt(1000) + 5;
+                    animation.setRate(1d/andomInt);
                     rectOnScreen = false;
                 }
             }
         }));
-        //animation.play();
-        */
+        animation.play();
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.SPACE && count < 6) {
+                    if (animation.getStatus() == Animation.Status.RUNNING) {
+                        //pane.getChildren().clear();
+                        animation.pause();
+                        int andomInt = generator.nextInt(1) + 5;
+                        animation.setRate(1d/andomInt);
+                    } else if (animation.getStatus() == Animation.Status.PAUSED) {
+                        animation.play();
+                        int andomInt = generator.nextInt(1) + 5;
+                        animation.setRate(1d/andomInt);
+                        //pane.getChildren().add(redRect);
+                        //rectOnScreen = true;
+                    }
+                }
+            }
+        });
+       */
 
 
+        //just flashes
+        /* 
         EventHandler<ActionEvent> eventHandler = e ->{
             if (rectOnScreen == false) {
                 pane.getChildren().add(redRect);
@@ -151,7 +175,7 @@ public class reactionProject extends Application {
                 }
             }
         });
-        
+        */
 
         /* 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -169,6 +193,68 @@ public class reactionProject extends Application {
             }
         });
         */
+
+        redRect.setFill(Color.RED);
+
+        EventHandler<ActionEvent> eventHandler = e -> {
+            if (rectOnScreen == false) {
+                pane.getChildren().add(redRect);
+                rectOnScreen = true;
+            } else {
+                //pane.getChildren().clear();
+                //rectOnScreen = false;
+            }
+        };
+
+        Timeline animation = new Timeline (new KeyFrame(Duration.millis(randomInt), eventHandler));
+        animation.setCycleCount(Timeline.INDEFINITE);
+
+
+        
+        if(rectOnScreen == true) {
+            animation.pause();
+            startTime = System.nanoTime();
+        } else {
+            animation.play();
+        }
+        //animation.play();
+
+        //if (count == 5){
+           // start = false;
+           // animation.pause();
+           // pane.getChildren().clear();
+            //System.out.println("Your average reaction time is: " + totalTime/count);
+        //}
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.SPACE && count < 6) {
+                    if (rectOnScreen == true) {
+                        long finish = System.nanoTime();
+                        finish = finish/(1000000000);
+                        long estimatedTime = finish - startTime;
+                        totalTime = (totalTime +  estimatedTime);
+                        count++;
+                        pane.getChildren().clear();
+                        System.out.println("The start time is: " + startTime);
+                        System.out.println("The finish time is: " + finish);
+                        System.out.println("The estimated time is: " + estimatedTime);
+                        System.out.println("The total time is: " + totalTime);
+                        System.out.println("The count is: " + count);
+                        System.out.println();
+                        rectOnScreen = false;
+                    } else if (rectOnScreen == false) {
+                        System.out.println("The rectangle is not on the screen.");
+                    }
+                } else if (event.getCode() == KeyCode.SPACE && count >= 5) {
+                        start = false;
+                        animation.pause();
+                        pane.getChildren().clear();
+                        System.out.println("Your average reaction time is " + (totalTime/count) + " in seconds.");
+                }
+            }
+        });
     }
 
     public static void main(String[] args) throws Exception{
