@@ -31,6 +31,7 @@ public class reactionProject extends Application {
         "When the red rectangle appears on the screen, press the space bar as quickly as you can. Press start to begin.", startButt);
     private int count = 0;
     private Random generator;
+    private int randomInt = 1000;
     
     
 
@@ -77,7 +78,6 @@ public class reactionProject extends Application {
         redRect.setFill(Color.RED);
         pane.getChildren().add(redRect);
         rectOnScreen = true;
-
         /*
         EventHandler<KeyEvent> spaceHandler = e -> {
                 if(event.getCode() == KeyCode.SPACE && count < 6) {
@@ -93,14 +93,67 @@ public class reactionProject extends Application {
         */
 
 
-        //EventHandler<ActionEvent> eventHandler = e ->{
-            //if (rectOnScreen == false) {
-                //pane.getChildren().add(redRect);
-            //}
-        //};
 
-        //Timeline animation = new Timeline (new KeyFrame(Duration.millis(500), eventHandler));
 
+        /* 
+        Timeline animation = new Timeline();
+
+        animation.getKeyFrames().addAll(new KeyFrame(Duration.ZERO, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (rectOnScreen == false) {
+                    pane.getChildren().add(redRect);
+                    randomInt = generator.nextInt(1000) + 5;
+                    animation.setRate(1d/randomInt);
+                    rectOnScreen = true;
+                } else {
+                    pane.getChildren().clear();
+                    randomInt = generator.nextInt(1000) + 5;
+                    animation.setRate(1d/randomInt);
+                    rectOnScreen = false;
+                }
+            }
+        }));
+        //animation.play();
+        */
+
+
+        EventHandler<ActionEvent> eventHandler = e ->{
+            if (rectOnScreen == false) {
+                pane.getChildren().add(redRect);
+                rectOnScreen = true;
+            } else {
+                pane.getChildren().clear();
+                rectOnScreen = false;
+            }
+        };
+
+        Timeline animation = new Timeline (new KeyFrame(Duration.millis(randomInt), eventHandler));
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.play();
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.SPACE && count < 6) {
+                    if (animation.getStatus() == Animation.Status.RUNNING) {
+                        //pane.getChildren().clear();
+                        animation.pause();
+                        int andomInt = generator.nextInt(1) + 5;
+                        animation.setRate(1d/andomInt);
+                    } else if (animation.getStatus() == Animation.Status.PAUSED) {
+                        animation.play();
+                        int andomInt = generator.nextInt(1) + 5;
+                        animation.setRate(1d/andomInt);
+                        //pane.getChildren().add(redRect);
+                        //rectOnScreen = true;
+                    }
+                }
+            }
+        });
+        
+
+        /* 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -115,6 +168,7 @@ public class reactionProject extends Application {
                 }
             }
         });
+        */
     }
 
     public static void main(String[] args) throws Exception{
