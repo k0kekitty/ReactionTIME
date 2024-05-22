@@ -20,6 +20,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 
 
+
 public class reactionProject extends Application {
     private boolean start = false;
     private boolean rectOnScreen = false;
@@ -35,6 +36,7 @@ public class reactionProject extends Application {
     private long totalTime = 0;
     private long startTime = 0;
     private long finish = 0;
+    private long estimatedTime = 0;
     
     
 
@@ -212,38 +214,34 @@ public class reactionProject extends Application {
 
         
         if(rectOnScreen == true) {
+            //startTime = System.nanoTime();
             animation.pause();
             startTime = System.nanoTime();
+            //startTime = System.currentTimeMillis();
         } else {
             animation.play();
         }
-        //animation.play();
-
-        //if (count == 5){
-           // start = false;
-           // animation.pause();
-           // pane.getChildren().clear();
-            //System.out.println("Your average reaction time is: " + totalTime/count);
-        //}
-
+        
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.SPACE && count < 6) {
                     if (rectOnScreen == true) {
-                        long finish = System.nanoTime();
-                        finish = finish/(1000000000);
-                        long estimatedTime = finish - startTime;
-                        totalTime = (totalTime +  estimatedTime);
+                        finish = System.nanoTime();
+                        //finish = System.currentTimeMillis();
+                        rectOnScreen = false;
+                        finish = finish/1000000000;
+                        estimatedTime = finish-startTime;
+                        totalTime += estimatedTime;
                         count++;
                         pane.getChildren().clear();
-                        System.out.println("The start time is: " + startTime);
-                        System.out.println("The finish time is: " + finish);
-                        System.out.println("The estimated time is: " + estimatedTime);
-                        System.out.println("The total time is: " + totalTime);
-                        System.out.println("The count is: " + count);
-                        System.out.println();
-                        rectOnScreen = false;
+                        //System.out.println("The start time is: " + startTime);
+                        //System.out.println("The finish time is: " + finish);
+                        //System.out.println("The estimated time is: " + estimatedTime);
+                        //System.out.println("The total time is: " + totalTime);
+                        //System.out.println("The count is: " + count);
+                        //System.out.println();
+                        //rectOnScreen = false;
                     } else if (rectOnScreen == false) {
                         System.out.println("The rectangle is not on the screen.");
                     }
