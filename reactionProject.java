@@ -201,6 +201,7 @@ public class reactionProject extends Application {
         EventHandler<ActionEvent> eventHandler = e -> {
             if (rectOnScreen == false) {
                 pane.getChildren().add(redRect);
+                startTime = System.currentTimeMillis();
                 rectOnScreen = true;
             } else {
                 //pane.getChildren().clear();
@@ -211,36 +212,46 @@ public class reactionProject extends Application {
         Timeline animation = new Timeline (new KeyFrame(Duration.millis(randomInt), eventHandler));
         animation.setCycleCount(Timeline.INDEFINITE);
 
-
-        
+        animation.play();
+        /* 
         if(rectOnScreen == true) {
             //startTime = System.nanoTime();
-            animation.pause();
-            startTime = System.nanoTime();
+            //animation.pause();
+            //startTime = System.nanoTime();
             //startTime = System.currentTimeMillis();
+            //gettingReactionTime(animation);
         } else {
             animation.play();
         }
+        */
+        /* 
+        if (animation.getStatus() == Animation.Status.PAUSED) {
+            System.out.println("HI");
+        } else {
+            System.out.println("bye");
+        }
+         */
+
         
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.SPACE && count < 6) {
                     if (rectOnScreen == true) {
-                        finish = System.nanoTime();
-                        //finish = System.currentTimeMillis();
+                        //finish = System.nanoTime();
+                        finish = System.currentTimeMillis();
                         rectOnScreen = false;
-                        finish = finish/1000000000;
+                        //finish = finish/1000000000;
                         estimatedTime = finish-startTime;
                         totalTime += estimatedTime;
                         count++;
                         pane.getChildren().clear();
-                        //System.out.println("The start time is: " + startTime);
-                        //System.out.println("The finish time is: " + finish);
+                        System.out.println("The start time is: " + startTime);
+                        System.out.println("The finish time is: " + finish);
                         //System.out.println("The estimated time is: " + estimatedTime);
                         //System.out.println("The total time is: " + totalTime);
                         //System.out.println("The count is: " + count);
-                        //System.out.println();
+                        System.out.println();
                         //rectOnScreen = false;
                     } else if (rectOnScreen == false) {
                         System.out.println("The rectangle is not on the screen.");
@@ -249,11 +260,19 @@ public class reactionProject extends Application {
                         start = false;
                         animation.pause();
                         pane.getChildren().clear();
-                        System.out.println("Your average reaction time is " + (totalTime/count) + " in seconds.");
+                        System.out.println("Your average reaction time is " + (totalTime/count) + " in milliseconds.");
                 }
             }
         });
     }
+
+    /* 
+    private void gettingReactionTime(Timeline animation1) {
+        System.out.println("hi");
+        //animation1.pause();
+        System.out.println("hi");
+    }
+    */
 
     public static void main(String[] args) throws Exception{
         launch(args);
