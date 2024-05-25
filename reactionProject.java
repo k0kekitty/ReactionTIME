@@ -19,8 +19,13 @@ import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 
-
-
+/**
+ * Program that measures reaction time of the user based on how quickly the user can
+ * press the space bar when the red rectangle appears on the screen.
+ *
+ * @author Maria Cymbalyuk
+ * @version 1.0
+ */
 public class reactionProject extends Application {
     private boolean start = false;
     private boolean rectOnScreen = false;
@@ -38,6 +43,7 @@ public class reactionProject extends Application {
     private long finish = 0;
     private long estimatedTime = 0;
 
+    //Sets stage and allows screen to appear
     @Override
     public void start(Stage primaryStage) throws Exception {
         description.setContentDisplay(ContentDisplay.BOTTOM);
@@ -50,6 +56,7 @@ public class reactionProject extends Application {
         primaryStage.show();
  }
 
+    //Event handler for the start button so that the game can begin
     class startHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -57,6 +64,7 @@ public class reactionProject extends Application {
         }
     }
 
+    //Method that has the rectangle appear and the reaction time is recorded
     private void beginGame() {
         start = true;
         pane.getChildren().remove(description);
@@ -87,7 +95,7 @@ public class reactionProject extends Application {
                     if (rectOnScreen == true) {
                         finish = System.currentTimeMillis();
                         rectOnScreen = false;
-                        estimatedTime = finish-startTime;
+                        estimatedTime = finish - startTime;
                         totalTime += estimatedTime;
                         count++;
                         pane.getChildren().clear();
@@ -107,6 +115,11 @@ public class reactionProject extends Application {
         });
     }
 
+   /**
+   * The main method is only needed for the IDE with limited
+   * JavaFX support. Not needed for running from the command line.
+   * @param args The default Driver parameter
+   */
     public static void main(String[] args) throws Exception {
         launch(args);
  }
